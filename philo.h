@@ -64,5 +64,14 @@ void				dream_night(t_tred *t);
 void				my_sleep( unsigned long int time_period);
 void				usleeper(long time, struct timeval now);
 unsigned long int	get_time(void);
+//int	pars_arg(int argc, char **argv, t_philo *t);
+
+int 				check_philo_num(t_philo *t);
+int					check_common_time(t_philo *t);
+int 				check_philo_sleep(t_philo *t);
+int 				check_philo_eat(t_philo *t);
+int					print_pars_arg(void);
+int					check_num_of_arg(int argc);
+
 
 #endif

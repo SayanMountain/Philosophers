@@ -14,15 +14,16 @@
 
 int	prepare_input_param(int argc, char **argv, t_philo *t)
 {
+
+	check_num_of_arg(argc);
 	t->philo_num = ft_atoi (argv[1]);
-	if (t->philo_num < 1)
-	{
-		write(1, "error - create at least 1 threads\n", 34);
-		return (-1);
-	}
+		check_philo_num(t);
 	t->common_time = ft_atoi (argv[2]);
+		check_common_time(t);
 	t->philo_eat = ft_atoi (argv[3]);
+		check_philo_eat(t);
 	t->philo_sleep = ft_atoi (argv[4]);
+		check_philo_sleep(t);
 	if (argc == 6)
 		t->must_eat = ft_atoi(argv[5]);
 	else
@@ -87,11 +88,13 @@ int	check_death_and_must_eat(t_philo *t)
 		while (i < t->philo_num)
 		{
 			usleep (100);
-			if (t->common_time <= (get_time() - t->tred[i].start_time - t->tred[i].last_eat))
+			if (t->common_time <= \
+			(get_time() - t->tred[i].start_time - t->tred[i].last_eat))
 			{
-//				pthread_mutex_lock(&t->message);
-				printf("Time: %lu  Philo %d is died\n", get_time() - t->start_time, t->tred->philo_id);
-//				pthread_mutex_unlock(&t->message);
+				pthread_mutex_lock(&t->message);
+				printf("Time: %lu  Philo %d is died\n", \
+					   get_time() - t->start_time, t->tred->philo_id);
+				pthread_mutex_unlock(&t->message);
 				return (-1);
 			}
 			if (t->all_eat == t->philo_num)

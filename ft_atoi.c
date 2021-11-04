@@ -22,9 +22,7 @@ int	ft_atoi(char *str)
 	while (*str == '\t' || *str == '\f' || *str == '\r' \
 			|| *str == '\n' || *str == '\v' || *str == ' ')
 		str++;
-	if (*str == '-')
-		kudrin = -1;
-	if (*str == '-' || *str == '+')
+	if (*str == '+')
 		str++;
 	while (*str >= '0' && *str <= '9')
 		numero = numero * 10 + (*str++ - '0');

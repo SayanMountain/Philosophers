@@ -5,7 +5,8 @@ LIST		=  	main.c 							\
 				main_utils_1.c					\
 				ft_atoi.c 						\
 				utils_for_time_1.c				\
-				utils_for_life_1.c
+				utils_for_life_1.c				\
+				pars_arg.c
 
 
 OBJ			= $(LIST:.c=.o)

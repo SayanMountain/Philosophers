@@ -12,29 +12,27 @@
 
 #include "philo.h"
 
-void print_msg(const t_tred *t, char *msg) {
+void	print_msg(const t_tred *t, char *msg)
+{
 	pthread_mutex_lock(&t->table->message);
-	printf("Time: %lu  Philo %d %s\n", get_time() - t->start_time, t->philo_id, msg);
+	printf ("Time: %lu  Philo %d %s\n", \
+								get_time() - t->start_time, t->philo_id, msg);
 	if (t->table->common_time > (get_time() - t->start_time - t->last_eat))
 		pthread_mutex_unlock(&t->table->message);
 }
 
 void	eat_meat(t_tred *t)
 {
-	if(t->philo_id % 2)
+	if (t->philo_id % 2)
 	{
 		usleep (100);
 		pthread_mutex_lock(t->left);
-		print_msg(t, "is taken LEFT fork");
-		pthread_mutex_lock(t->right);
-		print_msg(t, "is taken RIGHT fork");
+		print_msg(t, "is taken fork");
 	}
 	else
 	{
 		pthread_mutex_lock(t->right);
-		print_msg(t, "is taken RIGHT fork");
-		pthread_mutex_lock(t->left);
-		print_msg(t, "is taken LEFT fork");
+		print_msg(t, "is taken fork");
 	}
 	print_msg(t, "is eating");
 	t->last_eat = get_time() - t->start_time;
