@@ -1,106 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pjeffere <pjeffere@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/19 10:59:02 by pjeffere          #+#    #+#             */
+/*   Updated: 2021/08/19 11:11:17 by pjeffere         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
+#include <fcntl.h>
+#include <signal.h>
 
-void *life(void *structure)
+void	*life(void *structure)
 {
-    t_tred *t;
-//    t_philo *t1;
+	t_tred	*t;
 
-    t = (t_tred *)structure;
-    printf("!!num philo = %d!!\n", t->numb_philo);
-//    int len;
-//    int i;
-//    t_philo s;
-
-//    s = *g_s;
-//    int i = 0;
-//    usleep(500);
-//    printf("\nTYT\n");
-    while (1)
-    {
-        pthread_mutex_lock(t->left);
-//        printf("mutex_right %p\n", t->left); ////// принтф вилка залочена ли
-        pthread_mutex_lock(t->right);
-//        printf("mutex_right %p\n", t->right); //////принтф вилка залочена ли
-
-        ////// принтф такой то философ начал есть
-        eat();
-        pthread_mutex_unlock(t->left);
-        pthread_mutex_unlock(t->right);
-        night();
-//        printf("\n\nTYT i TYT\n");
-    }
-
+	t = (t_tred *)structure;
+	pthread_detach(t->philo);
+//	usleep(100);
+	t->last_eat = get_time() - t->start_time;
+	while (1)
+	{
+		eat_meat(t);
+		t->act_eat--;
+		if (t->act_eat == 0)
+		{
+			t->table->all_eat += 1;
+			break ;
+		}
+		dream_night(t);
+	}
+	return (0);
 }
 
-
-void eat ()
+int	main(int argc, char **argv)
 {
-    printf("\x1B[32m EAT\n");
+	t_philo	t;
+
+	if (prepare_input_param(argc, argv, &t) == -1)
+		return (-1);
+	create_and_gave_mutex(&t);
+	create_and_launch_threads(&t);
+	check_death_and_must_eat(&t);
+	return (0);
 }
 
-void night()
-{
-    printf("\x1B[35m NIGHT\n");
-}
-
-int main(int argc, char **argv)
-{
-    t_philo t;
-    int i = 0;
-//    int j = 0;
-
-    argc = 0;
-
-    t.philo_num     = ft_atoi(argv[1]);
-    t.common_time   = ft_atoi(argv[2]);
-    t.philo_eat     = ft_atoi(argv[3]);
-    t.philo_sleep   = ft_atoi(argv[4]);
-    t.mutex = malloc(sizeof(pthread_mutex_t) * t.philo_num);
-    t.tred = malloc(sizeof (t_tred) * t.philo_num);
-    t.tred->act = 0;                                                //// для того, чтобы смотреть кто и где
-
-//    g_s = &t;
-    i = 0;
-    while(i < t.philo_num)
-    {
-        pthread_mutex_init(&t.mutex[i], NULL);                          //// 1 создаю mutex
-        t.tred->act++;
-//        printf("\nMutex_init %d has activated\t", i);
-//        printf("Процесс № %p\t",&t.mutex[i]);
-//        printf("Операция № %d\t",t.tred->act - 1);
-        i++;
-    }
-
-    i = 0;
-    while(i < t.philo_num) //// модернизировал до работы циклов по четным нечетным потокам
-    {
-        t.tred[i].numb_philo = i + 1;
-        t.tred[i].left = &t.mutex[i];
-        if (i != t.philo_num - 1)
-            t.tred[i].right = &t.mutex[i + 1];
-        else
-            t.tred[i].right = &t.mutex[0];
-        pthread_create(&t.tred[i].philo, NULL, &life, (void *)&t.tred[i]);
-        printf("\nTred Left  %p\n", t.tred[i].left);
-        printf("Tred Right %p\n", t.tred[i].right);
-        pthread_detach(t.tred[i].philo);
-//        }
-//        else
-//        {
-//            exit(0);    /////// пока буду работать с четным числом философов
-//            //            t.tred[i].left = &t.mutex[i];
-//            //            t.tred[i].right = &t.mutex[i + 1];
-//            //            pthread_create(&t.tred[j].philo, NULL, &all, &i);
-//            j++;
-//        }
-        i++;
-//        printf("\n\nTYT\n");
-    }
-}
-
-
-
-
-
-
-
+////// ПАРСЕР
+////// зачем mutex на сообщения?

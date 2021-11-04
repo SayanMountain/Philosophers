@@ -1,8 +1,12 @@
 NAME		= 	philo
 HEADER		= 	philo
 
-LIST		=  	main.c \
-				ft_atoi.c \
+LIST		=  	main.c 							\
+				main_utils_1.c					\
+				ft_atoi.c 						\
+				utils_for_time_1.c				\
+				utils_for_life_1.c
+
 
 OBJ			= $(LIST:.c=.o)
 
@@ -21,6 +25,9 @@ clean :
 
 fclean :	clean
 			rm -f $(NAME)
+
+debug:
+	gcc -g $(LIST) -o $(NAME)
 
 re :		fclean all
 

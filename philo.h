@@ -1,88 +1,68 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pjeffere <pjeffere@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/19 10:59:08 by pjeffere          #+#    #+#             */
+/*   Updated: 2021/08/19 13:06:32 by pjeffere         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
-#define PHILO_H
+# define PHILO_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <string.h>
-#include <pthread.h>
-#include <sys/semaphore.h>
-#include "sys/time.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <string.h>
+# include <pthread.h>
+# include <sys/semaphore.h>
+# include "sys/time.h"
+# include <time.h>
+# include <fcntl.h>
+# include <signal.h>
 
-#define KNRM  "\x1B[0m"      //// белый
-#define KRED  "\x1B[31m"     //// красный
-#define KGRN  "\x1B[32m"     //// зеленый
-#define KYEL  "\x1B[33m"     //// желтый
-#define KBLU  "\x1B[34m"     //// синий
-#define KMAG  "\x1B[35m"     //// фиолетовый
-#define KCYN  "\x1B[36m"     //// бирюзовый
-#define KWHT  "\x1B[37m"     //// серый
-
-//printf("\x1B[32mПроцесс № %p\n",&t.mutex[i]);
-//printf("\x1B[34mThread %d has started\t\n", j);
-
-//typedef struct          s_table            //// СТОЛ
-//{
-//    struct s_philo      *param;
-//    int                 philo_size;
-//    int                 time_to_die;
-//    int                 time_to_eat;
-//    int                 time_to_sleep;
-//    int                 how_many_eat;
-//    int                 fork_to_malloc;
-//    pthread_t           *ph;               //// потоки
-//}                       t_table;
-
-//typedef struct          s_philo            //// ФИЛОСОФЫ
-//{
-//    pthread_mutex_t     *fork_left;
-//    pthread_mutex_t     *fork_right;
-//    struct s_table      *param2;
-//    struct t_philo1     *tPhilo1;
-//}                       t_philo;
-//
-//typedef struct          s_each_philo
-//{
-//    int                 fork_right;
-//    int                 fork_left;
-//    int                 filo1;
-//
-//}                       t_philo1;
-
-
-typedef struct          s_tred
+typedef struct s_tred
 {
-    pthread_t           philo;
-    int                 act;
-    int                 numb_philo;
-    pthread_mutex_t     *left;      //// левая рука философа
-    pthread_mutex_t     *right;     //// правая рука философа
-}                       t_tred;
+	pthread_t			philo;
+	int					act_eat;
+	int					philo_id;
+	pthread_mutex_t		*left;
+	pthread_mutex_t		*right;
+	struct s_philo		*table;
+	unsigned long		start_time;
+	unsigned long int	last_eat;
+}						t_tred;
 
-typedef struct          s_philo
+typedef struct s_philo
 {
-    pthread_mutex_t     *mutex;
-    int                 i;
-    t_tred              *tred;
-    int                 philo_num;
-    int                 common_time;
-    int                 philo_eat;
-    int                 philo_sleep;
-    int                 time_to_eat;
-}                       t_philo;
+	pthread_mutex_t		message;
+	pthread_mutex_t		*mutex;
+	t_tred				*tred;
+	int					philo_num;
+	int					philo_eat;
+	int					philo_sleep;
+	int					must_eat;
+	int					all_eat;
+	unsigned long		current_time;
+	unsigned long		start_time;
+	unsigned long		common_time;
+}						t_philo;
 
-//struct timeval {
-//    time_t          tv_sec;    ////sec
-//    suseconds_t     tv_usec;   ////microsec
-//};
-
-//t_philo *g_s;
-
-int         ft_atoi(char *str);
-void        eat();
-void        night();
-long        function_for_check_time();
-void        go_bad(int lenght);
+long long			get_ms(struct timeval old);
+int					ft_atoi(char *str);
+int					check_death_and_must_eat(t_philo *t);
+void				create_and_gave_mutex(t_philo *t);
+void				create_and_launch_threads(t_philo *t);
+int					prepare_input_param(int argc, char **argv, t_philo *t);
+void				*life(void *structure);
+void				eat_meat(t_tred *t);
+void				dream_night(t_tred *t);
+void				my_sleep( unsigned long int time_period);
+void				usleeper(long time, struct timeval now);
+unsigned long int	get_time(void);
 
 #endif
