@@ -25,6 +25,15 @@
 # include <fcntl.h>
 # include <signal.h>
 
+typedef enum e_errors
+{
+	ERROR_IN_ARGV_1,
+	ERROR_IN_ARGV_2,
+	ERROR_IN_ARGV_3,
+	ERROR_IN_ARGV_4,
+	ERROR_IN_ARGV_5,
+}			t_errors;
+
 typedef struct s_tred
 {
 	pthread_t			philo;
@@ -62,16 +71,8 @@ void				*life(void *structure);
 void				eat_meat(t_tred *t);
 void				dream_night(t_tred *t);
 void				my_sleep( unsigned long int time_period);
-void				usleeper(long time, struct timeval now);
 unsigned long int	get_time(void);
-//int	pars_arg(int argc, char **argv, t_philo *t);
-
-int 				check_philo_num(t_philo *t);
-int					check_common_time(t_philo *t);
-int 				check_philo_sleep(t_philo *t);
-int 				check_philo_eat(t_philo *t);
-int					print_pars_arg(void);
-int					check_num_of_arg(int argc);
-
+int					check_philo_must_eat(int argc, t_philo *t);
+int					check_philo_core(t_philo *t);
 
 #endif

@@ -38,8 +38,17 @@ void	*life(void *structure)
 int	main(int argc, char **argv)
 {
 	t_philo	t;
-	argc--;
+
+	if (argc != 5 && argc != 6)
+	{
+		printf("Agrc must be 5 or 6, current value of argc is equal %d\n", argc);
+		return (1);
+	}
 	prepare_input_param(argc, argv, &t);
+	if (check_philo_must_eat(argc, &t))
+		return (1);
+	if (check_philo_core(&t))
+		return (1);
 	create_and_gave_mutex(&t);
 	create_and_launch_threads(&t);
 	check_death_and_must_eat(&t);

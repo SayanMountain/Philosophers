@@ -14,16 +14,10 @@
 
 int	prepare_input_param(int argc, char **argv, t_philo *t)
 {
-
-	check_num_of_arg(argc);
 	t->philo_num = ft_atoi (argv[1]);
-		check_philo_num(t);
 	t->common_time = ft_atoi (argv[2]);
-		check_common_time(t);
 	t->philo_eat = ft_atoi (argv[3]);
-		check_philo_eat(t);
 	t->philo_sleep = ft_atoi (argv[4]);
-		check_philo_sleep(t);
 	if (argc == 6)
 		t->must_eat = ft_atoi(argv[5]);
 	else
